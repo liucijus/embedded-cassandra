@@ -13,22 +13,20 @@ import static org.junit.Assert.assertEquals;
 
 public class ExampleCassandraTest {
     private String host = "127.0.0.1";
-    private EmbeddedCassandra embeddedCassandra = new EmbeddedCassandra(host, 9042);
     private Cluster cluster;
 
     @Before
     public void startCassandra() throws IOException {
-        embeddedCassandra.start();
+        ReusableCassandraEnvironment.start();
         cluster = Cluster.builder()
-                .withPort(embeddedCassandra.getPort())
-                .addContactPoint(embeddedCassandra.getHost())
+                .withPort(9042)
+                .addContactPoint(host)
                 .build();
     }
 
     @After
     public void stopCassandra() {
         cluster.close();
-        embeddedCassandra.stop();
     }
 
     @Test

@@ -9,8 +9,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.select;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 public class ExampleCassandraTest {
     private String host = "127.0.0.1";
@@ -38,6 +37,6 @@ public class ExampleCassandraTest {
                 select().all().from("system", "local")
         );
 
-        assertThat(resultSet.one().getString("listen_address"), containsString(host));
+        assertEquals(host, resultSet.one().getInet("listen_address").getHostAddress());
     }
 }

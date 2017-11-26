@@ -23,15 +23,14 @@ public class MeasureExecutionTest {
     private UUID instanceId = UUID.fromString("5020e902-891d-40da-ae35-5dd37950b391");
     private UUID itemId = UUID.fromString("7a8c8a55-f2ce-47be-8c8e-b622b591b7e3");
 
-    private String host = "127.0.0.1";
     private Cluster cluster;
 
     @Before
     public void startCassandra() throws IOException {
         ReusableCassandraEnvironment.start();
         cluster = Cluster.builder()
-                .withPort(9042)
-                .addContactPoint(host)
+                .withPort(ReusableCassandraEnvironment.getPort())
+                .addContactPoint(ReusableCassandraEnvironment.getHost())
                 .build();
     }
 

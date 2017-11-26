@@ -12,15 +12,14 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.select;
 import static org.junit.Assert.assertEquals;
 
 public class ExampleCassandraTest {
-    private String host = "127.0.0.1";
     private Cluster cluster;
 
     @Before
     public void startCassandra() throws IOException {
         ReusableCassandraEnvironment.start();
         cluster = Cluster.builder()
-                .withPort(9042)
-                .addContactPoint(host)
+                .withPort(ReusableCassandraEnvironment.getPort())
+                .addContactPoint(ReusableCassandraEnvironment.getHost())
                 .build();
     }
 
@@ -35,6 +34,9 @@ public class ExampleCassandraTest {
                 select().all().from("system", "local")
         );
 
-        assertEquals(host, resultSet.one().getInet("listen_address").getHostAddress());
+        assertEquals(
+                ReusableCassandraEnvironment.getHost(),
+                resultSet.one().getInet("listen_address").getHostName()
+        );
     }
 }
